@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button button = findViewById(R.id.button);
+        Button button = findViewById(R.id.button );
         TextView textView = findViewById(R.id.open_search_bar_text_view);
 
 
