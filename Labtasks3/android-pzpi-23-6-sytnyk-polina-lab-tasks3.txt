@@ -1,59 +1,59 @@
-?МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
-ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+РњР†РќР†РЎРўР•Р РЎРўР’Рћ РћРЎР’Р†РўР Р† РќРђРЈРљР РЈРљР РђР‡РќР
+РҐРђР РљР†Р’РЎР¬РљРР™ РќРђР¦Р†РћРќРђР›Р¬РќРР™ РЈРќР†Р’Р•Р РЎРРўР•Рў Р РђР”Р†РћР•Р›Р•РљРўР РћРќР†РљР
 
 
-КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
-
-
-
-
-Звіт
-з лабораторної роботи № 3 з дисципліни
-Програмування під Android
+РљРђР¤Р•Р”Р Рђ РџР РћР“Р РђРњРќРћР‡ Р†РќР–Р•РќР•Р Р†Р‡
 
 
 
 
-
-
-Виконала:                                                                                                                   Перевірив:
-ст. гр. ПЗПІ-23-6                        		                                     		ст. викладач кафедри ПІ
-Ситник Поліна				                                                         Сокорчук Ігор П
+Р—РІС–С‚
+Р· Р»Р°Р±РѕСЂР°С‚РѕСЂРЅРѕС— СЂРѕР±РѕС‚Рё в„– 3 Р· РґРёСЃС†РёРїР»С–РЅРё
+РџСЂРѕРіСЂР°РјСѓРІР°РЅРЅСЏ РїС–Рґ Android
 
 
 
 
 
 
+Р’РёРєРѕРЅР°Р»Р°:                                                                                                                   РџРµСЂРµРІС–СЂРёРІ:
+СЃС‚. РіСЂ. РџР—РџР†-23-6                        		                                     		СЃС‚. РІРёРєР»Р°РґР°С‡ РєР°С„РµРґСЂРё РџР†
+РЎРёС‚РЅРёРє РџРѕР»С–РЅР°				                                                         РЎРѕРєРѕСЂС‡СѓРє Р†РіРѕСЂ Рџ
 
 
 
-Харків 2024
-
-ЗАВДАННЯ
-
-Розробити калькулятор на 4 базові арифметичні операції з кнопками для введення аргументів і дій.
-Калькулятор повинен мати адаптивний користувацький інтерфейс у різних орієнтаціях екрану та на екранах різної роздільної здатності.
 
 
-ХІД РОБОТИ
 
-Cтворюємо новий проєкт та обираємо Empty Views Activity.
-  Для розмітки був використаний LinerLayout, в якому знаходиться 
-текстове поле для виведення результату та GridLayout для кнопок калькулятора.
+
+
+
+РҐР°СЂРєС–РІ 2024
+
+Р—РђР’Р”РђРќРќРЇ
+
+Р РѕР·СЂРѕР±РёС‚Рё РєР°Р»СЊРєСѓР»СЏС‚РѕСЂ РЅР° 4 Р±Р°Р·РѕРІС– Р°СЂРёС„РјРµС‚РёС‡РЅС– РѕРїРµСЂР°С†С–С— Р· РєРЅРѕРїРєР°РјРё РґР»СЏ РІРІРµРґРµРЅРЅСЏ Р°СЂРіСѓРјРµРЅС‚С–РІ С– РґС–Р№.
+РљР°Р»СЊРєСѓР»СЏС‚РѕСЂ РїРѕРІРёРЅРµРЅ РјР°С‚Рё Р°РґР°РїС‚РёРІРЅРёР№ РєРѕСЂРёСЃС‚СѓРІР°С†СЊРєРёР№ С–РЅС‚РµСЂС„РµР№СЃ Сѓ СЂС–Р·РЅРёС… РѕСЂС–С”РЅС‚Р°С†С–СЏС… РµРєСЂР°РЅСѓ С‚Р° РЅР° РµРєСЂР°РЅР°С… СЂС–Р·РЅРѕС— СЂРѕР·РґС–Р»СЊРЅРѕС— Р·РґР°С‚РЅРѕСЃС‚С–.
+
+
+РҐР†Р” Р РћР‘РћРўР
+
+CС‚РІРѕСЂСЋС”РјРѕ РЅРѕРІРёР№ РїСЂРѕС”РєС‚ С‚Р° РѕР±РёСЂР°С”РјРѕ Empty Views Activity.
+  Р”Р»СЏ СЂРѕР·РјС–С‚РєРё Р±СѓРІ РІРёРєРѕСЂРёСЃС‚Р°РЅРёР№ LinerLayout, РІ СЏРєРѕРјСѓ Р·РЅР°С…РѕРґРёС‚СЊСЃСЏ 
+С‚РµРєСЃС‚РѕРІРµ РїРѕР»Рµ РґР»СЏ РІРёРІРµРґРµРЅРЅСЏ СЂРµР·СѓР»СЊС‚Р°С‚Сѓ С‚Р° GridLayout РґР»СЏ РєРЅРѕРїРѕРє РєР°Р»СЊРєСѓР»СЏС‚РѕСЂР°.
 <TextView
     android:id="@+id/result"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:layout_weight="1"
     android:background="@android:color/white"
-    android:contentDescription="Результат: 0"
+    android:contentDescription="Р РµР·СѓР»СЊС‚Р°С‚: 0"
     android:enabled="false"
     android:gravity="end"
     android:padding="11dp"
     android:textSize="32sp" />
 
-Нижче наведено код однієї з кнопок
+РќРёР¶С‡Рµ РЅР°РІРµРґРµРЅРѕ РєРѕРґ РѕРґРЅС–С”С— Р· РєРЅРѕРїРѕРє
 .<Button
     android:id="@+id/btn9"
     android:layout_width="0dp"
@@ -65,14 +65,14 @@ Cтворюємо новий проєкт та обираємо Empty Views Activity.
 
 
 
-Створюємо змінні для збереження першого числа, другого числа, оператора та результату. 
+РЎС‚РІРѕСЂСЋС”РјРѕ Р·РјС–РЅРЅС– РґР»СЏ Р·Р±РµСЂРµР¶РµРЅРЅСЏ РїРµСЂС€РѕРіРѕ С‡РёСЃР»Р°, РґСЂСѓРіРѕРіРѕ С‡РёСЃР»Р°, РѕРїРµСЂР°С‚РѕСЂР° С‚Р° СЂРµР·СѓР»СЊС‚Р°С‚Сѓ. 
 private TextView result;
 private String input = "";
 private String operator = "";
 private double num1 = 0, num2 = 0;
 private boolean isResultDisplayed = false;
 
-Обробник кнопок, що визначає, яка кнопка була натиснута:
+РћР±СЂРѕР±РЅРёРє РєРЅРѕРїРѕРє, С‰Рѕ РІРёР·РЅР°С‡Р°С”, СЏРєР° РєРЅРѕРїРєР° Р±СѓР»Р° РЅР°С‚РёСЃРЅСѓС‚Р°:
 View.OnClickListener numberClickListener = v -> {
             if (isResultDisplayed) {
                 input = "";
@@ -82,8 +82,8 @@ View.OnClickListener numberClickListener = v -> {
             input += button.getText().toString();
             result.setText(input);
         };
-Обробка кнопки крапки:
-Додається перевірка на вже наявну кому у числі. Приклад:
+РћР±СЂРѕР±РєР° РєРЅРѕРїРєРё РєСЂР°РїРєРё:
+Р”РѕРґР°С”С‚СЊСЃСЏ РїРµСЂРµРІС–СЂРєР° РЅР° РІР¶Рµ РЅР°СЏРІРЅСѓ РєРѕРјСѓ Сѓ С‡РёСЃР»С–. РџСЂРёРєР»Р°Рґ:
 findViewById(R.id.btnDot).setOnClickListener(v -> {
     if (!input.contains(".")) {
         if (input.isEmpty()) {
@@ -97,8 +97,8 @@ findViewById(R.id.btnDot).setOnClickListener(v -> {
 9      }
 10 });
 
-Обробка операторів:
-Зберігається перше число та оператор, а рядок введення обнуляється.
+РћР±СЂРѕР±РєР° РѕРїРµСЂР°С‚РѕСЂС–РІ:
+Р—Р±РµСЂС–РіР°С”С‚СЊСЃСЏ РїРµСЂС€Рµ С‡РёСЃР»Рѕ С‚Р° РѕРїРµСЂР°С‚РѕСЂ, Р° СЂСЏРґРѕРє РІРІРµРґРµРЅРЅСЏ РѕР±РЅСѓР»СЏС”С‚СЊСЃСЏ.
 View.OnClickListener operatorClickListener = v -> {
     if (!input.isEmpty()) {
         num1 = Double.parseDouble(input);
@@ -109,7 +109,7 @@ View.OnClickListener operatorClickListener = v -> {
     }
 };
 
-Обчислення результату:
+РћР±С‡РёСЃР»РµРЅРЅСЏ СЂРµР·СѓР»СЊС‚Р°С‚Сѓ:
 findViewById(R.id.btnEquals).setOnClickListener(v -> {
     if (!input.isEmpty() && !operator.isEmpty()) {
         try {
@@ -123,18 +123,18 @@ findViewById(R.id.btnEquals).setOnClickListener(v -> {
                 case "-":
                     resultValue = num1 - num2;
                     break;
-                case "?":
+                case "Г—":
                     resultValue = num1 * num2;
                     break;
-                case "?":
+                case "Г·":
                     if (num2 == 0) {
-                        result.setText("Помилка");
+                        result.setText("РџРѕРјРёР»РєР°");
                         return;
                     }
                     resultValue = num1 / num2;
                     break;
                 default:
-                    result.setText("Помилка");
+                    result.setText("РџРѕРјРёР»РєР°");
                     return;
             }
 
@@ -148,12 +148,12 @@ findViewById(R.id.btnEquals).setOnClickListener(v -> {
             isResultDisplayed = true;
 
         } catch (Exception e) {
-            result.setText("Помилка");
+            result.setText("РџРѕРјРёР»РєР°");
         }
     }
 });
 
-Очищення даних:
+РћС‡РёС‰РµРЅРЅСЏ РґР°РЅРёС…:
 findViewById(R.id.btnClear).setOnClickListener(v -> {
     input = "";
     operator = "";
@@ -161,14 +161,14 @@ findViewById(R.id.btnClear).setOnClickListener(v -> {
     result.setText("0");
     isResultDisplayed = false;
 });
-Видалення даних
+Р’РёРґР°Р»РµРЅРЅСЏ РґР°РЅРёС…
 findViewById(R.id.btnDelete).setOnClickListener(v -> {
     if (!input.isEmpty()) {
         input = input.substring(0, input.length() - 1);
         result.setText(input.isEmpty() ? "0" : input);
     }
 });
-Переведеня у відсотки
+РџРµСЂРµРІРµРґРµРЅСЏ Сѓ РІС–РґСЃРѕС‚РєРё
 findViewById(R.id.btnPercent).setOnClickListener(v -> {
     if (!input.isEmpty()) {
         try {
@@ -176,7 +176,7 @@ findViewById(R.id.btnPercent).setOnClickListener(v -> {
             input = String.valueOf(value);
             result.setText(input);
         } catch (Exception e) {
-            result.setText("Помилка");
+            result.setText("РџРѕРјРёР»РєР°");
         }
     }
 });
@@ -186,12 +186,12 @@ findViewById(R.id.btnPercent).setOnClickListener(v -> {
 
 
 
-ВИСНОВКИ
+Р’РРЎРќРћР’РљР
 
-Під час лабораторної роботи було створено додаток простого калькулятора на 4 базові дії, закріплено знання з обробки подій при використанні кнопок, обчислення записаних з кнопок змінних та відображення результату на екрані.
-Відеозвіт на YouTube. https://youtu.be/xCu4_dh4eqk
+РџС–Рґ С‡Р°СЃ Р»Р°Р±РѕСЂР°С‚РѕСЂРЅРѕС— СЂРѕР±РѕС‚Рё Р±СѓР»Рѕ СЃС‚РІРѕСЂРµРЅРѕ РґРѕРґР°С‚РѕРє РїСЂРѕСЃС‚РѕРіРѕ РєР°Р»СЊРєСѓР»СЏС‚РѕСЂР° РЅР° 4 Р±Р°Р·РѕРІС– РґС–С—, Р·Р°РєСЂС–РїР»РµРЅРѕ Р·РЅР°РЅРЅСЏ Р· РѕР±СЂРѕР±РєРё РїРѕРґС–Р№ РїСЂРё РІРёРєРѕСЂРёСЃС‚Р°РЅРЅС– РєРЅРѕРїРѕРє, РѕР±С‡РёСЃР»РµРЅРЅСЏ Р·Р°РїРёСЃР°РЅРёС… Р· РєРЅРѕРїРѕРє Р·РјС–РЅРЅРёС… С‚Р° РІС–РґРѕР±СЂР°Р¶РµРЅРЅСЏ СЂРµР·СѓР»СЊС‚Р°С‚Сѓ РЅР° РµРєСЂР°РЅС–.
+Р’С–РґРµРѕР·РІС–С‚ РЅР° YouTube. https://youtu.be/xCu4_dh4eqk
 
-ДОДАТОК А
+Р”РћР”РђРўРћРљ Рђ
 activity_main.xml
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -215,7 +215,7 @@ activity_main.xml
             android:layout_height="80dp"
             android:layout_weight="1"
             android:background="@android:color/white"
-            android:contentDescription="Результат: 0"
+            android:contentDescription="Р РµР·СѓР»СЊС‚Р°С‚: 0"
             android:enabled="false"
             android:gravity="end"
             android:padding="11dp"
@@ -244,7 +244,7 @@ activity_main.xml
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="4dp"
-                android:text="?"
+                android:text="вЊ«"
                 android:textSize="24sp" />
 
 
@@ -265,7 +265,7 @@ activity_main.xml
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="4dp"
-                android:text="?"
+                android:text="Г·"
                 android:textSize="24sp" />
 
             <Button
@@ -301,7 +301,7 @@ activity_main.xml
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="4dp"
-                android:text="?"
+                android:text="Г—"
                 android:textSize="24sp" />
 
             <Button
@@ -411,7 +411,7 @@ activity_main.xml
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-ДОДАТОК Б
+Р”РћР”РђРўРћРљ Р‘
 MainActivity.java
 package nure.sytnyk.polina.lab3;
 
@@ -496,18 +496,18 @@ public class MainActivity extends AppCompatActivity {
                         case "-":
                             resultValue = num1 - num2;
                             break;
-                        case "?":
+                        case "Г—":
                             resultValue = num1 * num2;
                             break;
-                        case "?":
+                        case "Г·":
                             if (num2 == 0) {
-                                result.setText("Помилка");
+                                result.setText("РџРѕРјРёР»РєР°");
                                 return;
                             }
                             resultValue = num1 / num2;
                             break;
                         default:
-                            result.setText("Помилка");
+                            result.setText("РџРѕРјРёР»РєР°");
                             return;
                     }
 
@@ -521,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
                     isResultDisplayed = true;
 
                 } catch (Exception e) {
-                    result.setText("Помилка");
+                    result.setText("РџРѕРјРёР»РєР°");
                 }
             }
         });
@@ -548,10 +548,12 @@ public class MainActivity extends AppCompatActivity {
                     input = String.valueOf(value);
                     result.setText(input);
                 } catch (Exception e) {
-                    result.setText("Помилка");
+                    result.setText("РџРѕРјРёР»РєР°");
                 }
             }
         });
     }
 }
+
+
 
