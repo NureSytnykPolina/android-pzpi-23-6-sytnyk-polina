@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Обычное состояние -->
+    <item
+        android:thumb="@drawable/seekbar"
+        android:progressDrawable="@drawable/seekbar_prog"
+        android:state_enabled="true" />
+
+    <!-- Неактивное состояние -->
+    <item
+        android:thumb="@drawable/seekbar"
+        android:progressDrawable="@drawable/seekbar_prog"
+        android:state_enabled="false" />
+</selector>

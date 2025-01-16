@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <!-- Заголовок для темы -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Тема"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <!-- Радио кнопки для выбора темы -->
+    <RadioGroup
+        android:id="@+id/themeGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/themeLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Світла"
+            android:textColor="@android:color/black"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+        <RadioButton
+            android:id="@+id/themeDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Темна"
+            android:textColor="@android:color/black"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+    </RadioGroup>
+
+    <!-- Заголовок для размера шрифта -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Розмір шрифту"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <!-- Ползунок для изменения размера шрифта -->
+    <SeekBar
+        android:id="@+id/fontSizeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="12"
+        android:progress="2"/>
+
+    <!-- Отображение текущего значения шрифта -->
+    <TextView
+        android:id="@+id/fontSizeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="14sp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

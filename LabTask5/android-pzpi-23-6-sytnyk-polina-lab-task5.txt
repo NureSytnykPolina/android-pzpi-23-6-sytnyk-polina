@@ -1,0 +1,232 @@
+Харківський університет радіоелектроніки
+Факультет комп'ютерних наук
+Кафедра програмної інженерії
+
+
+
+
+
+
+
+ЗВІТ
+до лабораторної роботи 4 з дисципліни
+"Програмування під Android"
+на тему "Створення нотаток"
+
+
+
+
+
+
+
+Виконала ст. гр ПЗПІ-23-6
+Ситник Поліна
+
+
+Перевірив 
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+Харків 2024
+
+МЕТА
+     
+    Метою цієї лабораторної роботи є ознайомити студентів з основами розробки мобільних додатків для платформи Android, зокрема, з використанням різних функцій інтерфейсу та налаштувань додатка. Студенти повинні навчитися реалізовувати різне відображення для портретної та ландшафтної орієнтації екрану, створювати та застосовувати редаговані теми інтерфейсу, а також додавати можливість змінювати розмір шрифтів через налаштування програми. Додатково, студенти повинні розробити функціонал для збереження даних нотаток у базі даних SQLite, що дозволить забезпечити збереження та редагування нотаток.
+
+ЗАВДАННЯ
+
+Доповнити завдання №4 наступними функціями:
+* реалізувати різне відображення для портретної та ланшафтної орієнтації екрану за допомогою тих самих фрагментів;
+* створити дві редаговані теми (тло, гарнітура шрифту, колір тексту тощо) і застосовувати їх в залежності від налаштувань програми.
+* додати можливість задавати в налаштуваннях програми розмір шрифту.
+
+Переробити завдання №4 так, щоб дані нотаток зберігалися у базі даних SQLite
+
+
+ХІД РОБОТИ
+
+Set.java
+Клас Set реалізує екран налаштувань додатка, де користувач може обирати між світлою та темною темою інтерфейсу, а також налаштовувати розмір шрифта..
+activity_set.xml
+Він описує інтерфейс екрану налаштувань, де користувач може вибирати тему світлу чи темну та налаштовувати розмір шрифта. У файлі визначені елементи, такі як RadioGroup для вибору теми та SeekBar для зміни розміру шрифта
+
+
+
+ВИСНОВКИ     
+У результаті виконання лабораторної роботи я набула практичних навичок у розробці мобільних додатків для платформи Android. Також ознайомилася з основними аспектами створення додатків, такими як реалізація функціональності для створення, редагування, перегляду та видалення нотаток. Здобула досвід роботи з графічними елементами інтерфейсу, зокрема з іконками, контекстними меню та механізмами пошуку й фільтрації даних.
+     Посилання на відео в YouTube: https://youtu.be/FjAoARX96fM
+
+ВИКОРИСТАННІ ДЖЕРЕЛА
+1. Національний університет радіоелектроніки. https://dl.nure.ua/ .
+
+
+
+
+ДОДАТОК А
+Файл Set.java
+package nure.sytnyk.polina.lab4;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+public class Set extends AppCompatActivity {
+    private SharedPreferences preferences;
+    private RadioGroup themeGroup;
+    private SeekBar fontSizeSeekBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        applyTheme();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_set);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        themeGroup = findViewById(R.id.themeGroup);
+        fontSizeSeekBar = findViewById(R.id.fontSizeSeekBar);
+
+        int currentTheme = preferences.getInt("theme", 0);
+        int fontSize = preferences.getInt("fontSize", 14);
+
+        themeGroup.check(currentTheme == 0 ? R.id.themeLight : R.id.themeDark);
+
+        fontSizeSeekBar.setProgress(fontSize - 10);
+
+        themeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            int theme = checkedId == R.id.themeLight ? 0 : 1;
+            preferences.edit().putInt("theme", theme).apply();
+
+            recreate();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
+
+        fontSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int fontSize = progress + 10;
+                preferences.edit().putInt("fontSize", fontSize).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+    }
+
+    private void applyTheme() {
+        int theme = preferences.getInt("theme", 0);
+        if (theme == 0) {
+            setTheme(R.style.Light);
+        } else {
+            setTheme(R.style.Dark);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
+
+
+
+
+ДОДАТОК Б
+Файл activity_set.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <!-- Заголовок для темы -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Тема"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <!-- Радио кнопки для выбора темы -->
+    <RadioGroup
+        android:id="@+id/themeGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/themeLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Світла"
+            android:textColor="@android:color/black"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+        <RadioButton
+            android:id="@+id/themeDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Темна"
+            android:textColor="@android:color/black"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+    </RadioGroup>
+
+    <!-- Заголовок для размера шрифта -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Розмір шрифту"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <!-- Ползунок для изменения размера шрифта -->
+    <SeekBar
+        android:id="@+id/fontSizeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="12"
+        android:progress="2"/>
+
+    <!-- Отображение текущего значения шрифта -->
+    <TextView
+        android:id="@+id/fontSizeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="14sp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>
+
