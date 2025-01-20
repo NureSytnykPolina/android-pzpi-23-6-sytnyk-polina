@@ -1,0 +1,336 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з лабораторної роботи № 2 з дисципліни
+Програмування під Android
+
+
+
+
+
+
+Виконала:                                                Перевірив:
+ст. гр. ПЗПІ-23-6                                       ст. викладач кафедри ПІ
+Ситник Поліна                                       Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024?
+
+ЗАВДАННЯ
+
+Розробити редактор, у якому з допомогою трьох регуляторів SeekBar 
+встановлюється колір панелі.
+Регулятори визначають RGB компоненти кольору панелі. Зовнішній вигляд 
+екрану редактора повинен залежати від орієнтації пристроя. У портретній 
+орієнтації пристроя, регулятори повинні знаходитися знизу від панелі, займати 
+1/3 висоти і розташовуватися на всю ширину екрану. У ланшафтній – праворуч 
+від панелі і займати 1/3 ширини. Решту екрану повинна займати кольорова 
+панель.
+?
+ХІД РОБОТИ
+
+     У файлі розмітки головної активності для портретної орієнтації екрану 
+створимо контейнер LinearLayout. Для кольорової панелі використаємо 
+компонент View, який буде займати 2/3 висоти екрану:
+
+  <View
+        android:id="@+id/color_panel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="@android:color/black" />
+
+     Створимо три регулятори SeekBar для зміни компонентів кольору – 
+червоного, зеленого та синього. Розташуємо їх під кольоровою панеллю, щоб 
+вони займали третину висоти екрану та встановлюємо максимальне значення 
+кожного на 255. Код портретної розмітки головної активності наведено у 
+додатку А. 
+     Створюємо файл розмітки land/activity_main.xml для ландшафтної 
+орієнтації екрану. Код розмітки буде аналогічний попередньому, але тепер 
+кольорова панель займає 60% ширини, а не висоти екрану, а регулятори 
+компонентів кольору розташовуються праворуч від неї. Код ландшафтної 
+розмітки головної активності наведено у додатку А. 
+     Переходимо до написання коду в класі MainActivity. Створимо змінні для 
+кожного компоненту кольору:
+     
+	1.  private SeekBar sbRed, sbGreen, sbBlue;
+     
+     Ініціалізуємо зв?язок з інтерфейсом:
+     
+  private void initializeComponents() {
+        sbRed = findViewById(R.id.red_bar);
+        sbGreen = findViewById(R.id.green_bar);
+        sbBlue = findViewById(R.id.blue_bar);
+        colorPreview = findViewById(R.id.color_panel);
+	
+     Для кожного регулятора додамо обробник подій: використаємо метод 
+setOnSeekBarChangeListener, та у методі зворотного виклику 
+onProgressChanged, який викликається при зміні позиції повзунка, будемо 
+оновлювати колір  панелі:
+
+ private void configureSeekBar(SeekBar seekBar, int index) {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                rgbValues[index] = progress;
+                applyColor();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+     Для оновлення кольору панелі використовуємо її метод 
+applyColor, в який передаємо колір, що буде створюватися з трьох 
+компонентів:
+     
+ private void applyColor() {
+        int color = Color.rgb(rgbValues[0], rgbValues[1], rgbValues[2]);
+        colorPreview.setBackgroundColor(color);
+    }
+     
+     Код файлу MainActivity.java наведено у додатку В.
+
+?
+ВИСНОВКИ
+
+На цій лабораторній роботі я  навчилась працювати з обробкою подій при 
+використанні регуляторів та відображення змін на екрані.
+Відеозвіт на YouTube. URL: https://youtu.be/eJ2PcuLUxaU
+
+
+?
+ДОДАТОК А
+
+Код файлу розмітки головної активності для портерної орієнтації.
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:padding="16dp">
+
+
+    <View
+        android:id="@+id/color_panel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="@android:color/black" />
+
+
+    <SeekBar
+        android:id="@+id/red_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:max="255" />
+
+
+    <SeekBar
+        android:id="@+id/green_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:max="255" />
+
+
+    <SeekBar
+        android:id="@+id/blue_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:max="255" />
+
+</LinearLayout>
+\
+ДОДАТОК Б
+
+Код файлу розмітки головної активності для ландшафтної орієнтації.
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="horizontal"
+android:padding="16dp"
+tools:context=".MainActivity">
+
+
+    <View
+        android:id="@+id/color_panel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="@android:color/black" />
+
+
+<LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <SeekBar
+        android:id="@+id/red_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:progress="0"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="0.334"/>
+
+
+    <SeekBar
+        android:id="@+id/green_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:progress="0"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="0.334"/>
+
+
+    <SeekBar
+        android:id="@+id/blue_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:progress="0"
+        android:layout_weight="0.334"/>
+
+</LinearLayout>
+</LinearLayout>
+
+
+
+
+
+
+ДОДАТОК В
+
+Код файлу MainActivity.java
+
+package nure.sytnyk.polina.lab2;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.SeekBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    private SeekBar sbRed, sbGreen, sbBlue;
+    private View colorPreview;
+
+
+    private final int[] rgbValues = new int[3];
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeComponents();
+
+        if (savedInstanceState != null) {
+            restoreColorValues(savedInstanceState);
+            applyColor();
+        }
+
+
+        setupSeekBarListeners();
+    }
+
+
+    private void initializeComponents() {
+        sbRed = findViewById(R.id.red_bar);
+        sbGreen = findViewById(R.id.green_bar);
+        sbBlue = findViewById(R.id.blue_bar);
+        colorPreview = findViewById(R.id.color_panel);
+    }
+
+    // Метод для відновлення значень кольору із збереженого стану
+    private void restoreColorValues(Bundle savedState) {
+        rgbValues[0] = savedState.getInt("RED_VALUE", 0);
+        rgbValues[1] = savedState.getInt("GREEN_VALUE", 0);
+        rgbValues[2] = savedState.getInt("BLUE_VALUE", 0);
+    }
+
+    // Метод для налаштування слухача для всіх повзунків
+    private void setupSeekBarListeners() {
+        configureSeekBar(sbRed, 0);
+        configureSeekBar(sbGreen, 1);
+        configureSeekBar(sbBlue, 2);
+    }
+
+
+    private void configureSeekBar(SeekBar seekBar, int index) {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                rgbValues[index] = progress;
+                applyColor();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    // Метод для застосування цвета на основе поточних значений RGB
+    private void applyColor() {
+        int color = Color.rgb(rgbValues[0], rgbValues[1], rgbValues[2]);
+        colorPreview.setBackgroundColor(color);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("RED_VALUE", rgbValues[0]);
+        outState.putInt("GREEN_VALUE", rgbValues[1]);
+        outState.putInt("BLUE_VALUE", rgbValues[2]);
+    }
+}
+
