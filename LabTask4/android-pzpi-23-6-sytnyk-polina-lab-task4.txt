@@ -1,0 +1,802 @@
+Харківський університет радіоелектроніки
+Факультет комп'ютерних наук
+Кафедра програмної інженерії
+
+
+
+
+
+
+
+ЗВІТ
+до лабораторної роботи 4 з дисципліни
+"Програмування під Android"
+на тему "Створення нотаток" 
+
+
+
+
+
+
+
+Виконала ст. гр ПЗПІ-23-6
+Ситник Поліна
+
+
+Перевірив 
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+
+МЕТА
+     
+    Метою цієї лабораторної роботи є ознайомити студентів з основами розробки мобільних додатків для платформи Android. Зокрема, студенти повинні навчитися реалізовувати функціонал для створення, редагування, перегляду та видалення нотаток. Вони також отримають навички роботи з графічними елементами інтерфейсу, такими як іконки, контекстне меню та пошук/фільтрація. Крім того, студенти ознайомляться з принципами локалізації інтерфейсу додатка для підтримки двох мов — української та англійської.
+
+ЗАВДАННЯ
+
+    Розробити застосунок для ведення нотаток.
+    
+    Застосунок повинен дозволяти переглядати список нотаток, створювати нову нотатку, редагувати нотатку та видаляти нотатку. Кожна нотатка повинна мати назву, опис, важливість (три класи), час і дату призначення і картинку (вибирається з галереї).
+    
+    У списку нотатки відображаються з іконкою з галереї і часом створення (праворуч зверху більш дрібним шрифтом), а також графічним відображенням класу важливості (іконка з множини).
+    
+    Потрібно реалізувати функції додавання, видалення, редагування (без збереження між перезапуск додатку) нотаток.
+    
+    Видалення/редагування викликаються з контекстного меню при довгому натисненні, додавання - з основного меню в ActionBar. У ActionBar реалізувати пошук / фільтрація заміток за змістом тексту, а також фільтрацію за важливістю. Текстові елементи користувацького інтерфейсу повинні бути локалізовані українською та англійською мовами.
+
+
+
+
+
+ХІД РОБОТИ
+Note.java
+Клас Note слугує моделлю даних для зберігання інформації про нотатки. Він містить приватні поля для збереження ідентифікатора нотатки, заголовка, опису, рівня важливості, дати та часу створення, а також URI зображення. Клас має конструктор для ініціалізації цих полів і методи доступу (геттери) для отримання значень. Кожна нотатка в додатку є екземпляром цього класу, що дає змогу зберігати необхідну інформацію в базі даних і використовувати її для відображення в інтерфейсі .
+AddNote.java
+Клас AddNote відповідає за процес додавання нової нотатки. Тут реалізовано введення даних користувачем, вибір зображення для нотатки та збереження цих даних у базу даних. Інтерфейс включає поля для введення заголовка та опису, вибір важливості за допомогою Spinner, а також кнопку для додавання зображення. Після натискання кнопки "Save Note" введена інформація зберігається в базі даних, і користувача перенаправляють до головного екрану зі списком нотаток .
+MainActivity.java
+Цей клас є головною активністю додатка, що відображає всі нотатки у вигляді списку через RecyclerView. MainActivity також надає можливість пошуку нотаток за заголовком через текстове поле, а також містить кнопку для переходу до екрану додавання нової нотатки. Адаптер NotesAdapter відповідає за завантаження нотаток з бази даних і відображення їх у вигляді карток. Користувач може натискати на нотатки для їх перегляду або редагування .
+Edit.java
+Клас EditNote дає можливість редагувати вже існуючі нотатки. У цьому класі користувач може змінювати заголовок, опис, рівень важливості та зображення нотатки. Також передбачена функція видалення нотатки через кнопку "Delete Note". Після редагування користувач може зберегти зміни в базі даних або видалити нотатку, після чого його перенаправляють до головного списку.
+Database.java
+Цей клас відповідає за роботу з базою даних SQLite. Він містить методи для створення таблиці нотаток і виконання операцій додавання, оновлення, видалення та отримання списку нотаток. У базі даних зберігаються поля: id, title, description, importance, dateTime і imageUri. Клас надає можливість взаємодіяти між основними активностями програми та базою даних .
+NoteAdapt.java
+Адаптер NoteAdapter відповідає за відображення списку нотаток у RecyclerView. Він формує кожен елемент списку у вигляді картки з інформацією про нотатку: заголовок, опис, дату, рівень важливості та зображення. Крім того, реалізовано інтерфейс OnNoteClickListener для обробки натискання на нотатки .
+
+
+ВИСНОВКИ     
+У результаті виконання лабораторної роботи я набула практичних навичок у розробці мобільних додатків для платформи Android. Також ознайомилася з основними аспектами створення додатків, такими як реалізація функціональності для створення, редагування, перегляду та видалення нотаток. Здобула досвід роботи з графічними елементами інтерфейсу, зокрема з іконками, контекстними меню та механізмами пошуку й фільтрації даних.
+ Посилання на відео в YouTube: https:https: //youtu.be/uNh4lZV-Srw
+
+
+
+
+
+
+ДОДАТОК А
+Файл MainActivity.java
+package nure.sytnyk.polina.lab4;
+import android.util.Log;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+import android.widget.Toast;
+
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements NoteAdapt.OnNoteClickListener {
+
+    private static final int IMAGE_PICK_CODE = 100;
+    private static final int NEW_NOTE_REQUEST = 200;
+    private static final int MODIFY_NOTE_REQUEST = 300;
+
+    private RecyclerView noteListView;
+    private NoteAdapt noteAdapter;
+    private ArrayList<Note> displayedNotes = new ArrayList<>();
+    private ArrayList<Note> backupNotes = new ArrayList<>();
+    private Database database;
+
+    private Uri imageUri;
+    private EditText searchBar;
+    private final ActivityResultLauncher<String> permissionRequest =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+                if (result) {
+                    refreshNoteList();
+                } else {
+                    Toast.makeText(this, "111annot fetch images.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeUI();
+        validatePermissions();
+        searchBar = findViewById(R.id.searchText);
+      configureSearchFeature();
+
+    }
+
+    private void initializeUI() {
+        noteListView = findViewById(R.id.recyclerView);
+
+        searchBar = findViewById(R.id.Edit);
+        database = new Database(this);
+
+        findViewById(R.id.addButton).setOnClickListener(view -> openNewNoteScreen());
+
+        noteListView.setLayoutManager(new LinearLayoutManager(this));
+        noteAdapter = new NoteAdapt(this, displayedNotes, this); // Прямо передаем 'this' для реализации интерфейса
+        noteListView.setAdapter(noteAdapter);
+    }
+
+    private void validatePermissions() {
+        String permission = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ?
+                Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE;
+
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequest.launch(permission);
+        }
+    }
+
+    private void configureSearchFeature() {
+        if (searchBar != null) {
+            searchBar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    showToast(s.toString());
+                    applySearchFilter(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        } else {
+            Log.e("MainActivity", "searchBar is null. Check if it is correctly initialized.");
+        }
+    }
+
+
+
+
+
+    private void applySearchFilter(String query) {
+        if (backupNotes.isEmpty()) {
+            backupNotes.addAll(displayedNotes);
+        }
+
+        displayedNotes.clear();
+
+        if (query.isEmpty()) {
+            displayedNotes.addAll(backupNotes);
+        } else {
+            for (Note item : backupNotes) {
+                if (item.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                    displayedNotes.add(item);
+                }
+            }
+        }
+        noteAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshNoteList() {
+        displayedNotes.clear();
+        backupNotes.clear();
+        displayedNotes.addAll(database.getNotes());
+        backupNotes.addAll(displayedNotes);
+        noteAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        refreshNoteList();
+    }
+
+    private void openNewNoteScreen() {
+        Intent intent = new Intent(this, AddNote.class);
+        startActivityForResult(intent, NEW_NOTE_REQUEST);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+        }
+
+        if ((requestCode == NEW_NOTE_REQUEST || requestCode == MODIFY_NOTE_REQUEST) && resultCode == RESULT_OK) {
+            refreshNoteList();
+        }
+    }
+
+    @Override
+    public void onNoteClick(Note note) {
+        Intent intent = new Intent(this, Edit.class);
+        intent.putExtra("note_id", note.getId());
+        intent.putExtra("title", note.getTitle()); //+"  note_id ="+note.getId());
+        intent.putExtra("description", note.getDescription());
+        intent.putExtra("importance", note.getImportance());
+        intent.putExtra("image_uri", note.getImageUri() != null ? note.getImageUri().toString() : "");
+
+        startActivityForResult(intent, MODIFY_NOTE_REQUEST);
+    }
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+Файл Note.java
+package nure.sytnyk.polina.lab4;
+import android.net.Uri;
+
+public class Note {
+    private long id;
+    private String title;
+    private String description;
+    private int importance;
+    private String dateTime;
+    private Uri imageUri;
+
+    public Note(long id, String title, String description, int importance, String dateTime, Uri imageUri) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.importance = importance;
+        this.dateTime = dateTime;
+        this.imageUri = imageUri;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getImportance() {
+        return importance;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК В
+Файл NoteAdapt.java
+package nure.sytnyk.polina.lab4;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class NoteAdapt extends RecyclerView.Adapter<NoteAdapt.NoteViewHolder> {
+
+    private final Context context;
+    private final ArrayList<Note> notesList;
+    private final OnNoteClickListener onNoteClickListener;
+
+    public NoteAdapt(Context context, ArrayList<Note> notesList, OnNoteClickListener onNoteClickListener) {
+        this.context = context;
+        this.notesList = notesList;
+        this.onNoteClickListener = onNoteClickListener;
+    }
+
+    @NonNull
+    @Override
+    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.note, parent, false);
+        return new NoteViewHolder(view, onNoteClickListener);  // Передаем слушатель в ViewHolder
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
+        Note note = notesList.get(position);
+        holder.bind(note);
+    }
+
+    @Override
+    public int getItemCount() {
+        return notesList.size();
+    }
+
+    public interface OnNoteClickListener {
+        void onNoteClick(Note note);
+    }
+
+    public static class NoteViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView title;
+        private final TextView description;
+        private final TextView dateTime;
+        private final ImageView image;
+        private final ImageView importance;
+        private final OnNoteClickListener onNoteClickListener;  // Ссылка на слушатель
+
+        public NoteViewHolder(View itemView, OnNoteClickListener onNoteClickListener) {
+            super(itemView);
+            this.onNoteClickListener = onNoteClickListener;  // Инициализация слушателя
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
+            dateTime = itemView.findViewById(R.id.dateTime);
+            image = itemView.findViewById(R.id.image);
+            importance = itemView.findViewById(R.id.importance);
+        }
+
+        public void bind(Note note) {
+            title.setText(note.getTitle());
+            description.setText(note.getDescription());
+            dateTime.setText(note.getDateTime());
+
+            setImage(note);
+            setImportance(note);
+
+            itemView.setOnClickListener(v -> onNoteClickListener.onNoteClick(note));  // Использование слушателя
+        }
+
+        private void setImage(Note note) {
+            if (note.getImageUri() != null) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(itemView.getContext().getContentResolver(), note.getImageUri());
+                    image.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    image.setImageResource(R.drawable.ic_launcher_background);
+                    e.printStackTrace();
+                }
+            } else {
+                image.setImageResource(R.drawable.ic_launcher_background);
+            }
+        }
+
+        private void setImportance(Note note) {
+            importance.setImageResource(getImportanceIcon(note.getImportance()));
+        }
+
+        private int getImportanceIcon(int importance) {
+            switch (importance) {
+                case 1:
+                    return R.drawable.low;
+                case 2:
+                    return R.drawable.medium;
+                case 3:
+                    return R.drawable.high;
+                default:
+                    return R.drawable.low;
+            }
+        }
+    }
+}
+
+
+
+ДОДАТОК Г
+Файл AddNote.java
+package nure.sytnyk.polina.lab4;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class AddNote extends AppCompatActivity {
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+
+    private EditText titleEditText, descriptionEditText;
+    private Spinner importanceSpinner;
+    private Button saveButton, selectImageButton;
+    private ImageView noteImageView;
+    private Uri imageUri;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add);
+
+        initViews();
+        setListeners();
+    }
+
+    private void initViews() {
+        titleEditText = findViewById(R.id.titleEditText);
+        descriptionEditText = findViewById(R.id.descriptionEditText);
+        importanceSpinner = findViewById(R.id.importanceSpinner);
+        saveButton = findViewById(R.id.saveButton);
+        selectImageButton = findViewById(R.id.selectImageButton);
+        noteImageView = findViewById(R.id.noteImageView);
+    }
+
+    private void setListeners() {
+        selectImageButton.setOnClickListener(v -> openGallery());
+        saveButton.setOnClickListener(v -> validateAndSaveNote());
+
+        titleEditText.addTextChangedListener(new SimpleTextWatcher());
+        descriptionEditText.addTextChangedListener(new SimpleTextWatcher());
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            handleImageSelection(data);
+        }
+    }
+
+    private void handleImageSelection(Intent data) {
+        imageUri = data.getData();
+        noteImageView.setImageURI(imageUri);
+    }
+
+    private void validateAndSaveNote() {
+        String title = titleEditText.getText().toString().trim();
+        String description = descriptionEditText.getText().toString().trim();
+
+        if (title.isEmpty() || description.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        } else {
+            saveNote(title, description);
+        }
+    }
+
+    private void saveNote(String title, String description) {
+        int importance = importanceSpinner.getSelectedItemPosition();
+        String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+        String imageUriString = (imageUri != null) ? imageUri.toString() : "";
+
+        Database dbHelper = new Database(this);
+        long noteId = dbHelper.addNote(title, description, importance, dateTime, imageUriString);
+
+        if (noteId != -1) {
+            Toast.makeText(this, "Note added successfully", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "Error adding note", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class SimpleTextWatcher implements android.text.TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(android.text.Editable editable) {
+
+        }
+    }
+}
+
+
+
+
+ДОДАТОК Д
+Файл Edit.java
+package nure.sytnyk.polina.lab4;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Edit extends AppCompatActivity {
+
+    private EditText titleEditText;
+    private EditText descriptionEditText;
+    private Spinner importanceSpinner;
+    private ImageView noteImageView;
+    private Button selectImageButton;
+    private Button saveButton;
+    private Button deleteButton;
+    private Database  dbHelper;
+    private Uri imageUri;
+    private String imageUri1;
+    private Note note;
+    private long noteId;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit);
+        dbHelper = new Database(this);
+        
+        titleEditText = findViewById(R.id.titleEditText);
+        descriptionEditText = findViewById(R.id.descriptionEditText);
+        importanceSpinner = findViewById(R.id.Spinner);
+        noteImageView = findViewById(R.id.noteImageView);
+        selectImageButton = findViewById(R.id.selectImage);
+        saveButton = findViewById(R.id.saveButton);
+        deleteButton = findViewById(R.id.deleteButton);
+
+
+        Intent intent = getIntent();
+         noteId = intent.getLongExtra("note_id", -1);
+        String title = intent.getStringExtra("title");
+        String description = intent.getStringExtra("description");
+        int importance = intent.getIntExtra("importance", 1);  // Default to "1" if no importance is provided
+        String dateTime = intent.getStringExtra("date_time");
+        String imageUriString = intent.getStringExtra("image_uri");
+        /*Uri imageUri1 = (imageUriString != null && !imageUriString.isEmpty())
+                ? Uri.parse(imageUriString)
+                : null;*/
+        imageUri1 = imageUriString;
+
+        if (noteId != -1) {
+            note = new Note(noteId, title, description, importance, dateTime, imageUriString != null ? Uri.parse(imageUriString) : null);
+            titleEditText.setText(note.getTitle());
+            descriptionEditText.setText(note.getDescription());
+            // Устанавливаем значение для Spinner
+            importanceSpinner.setSelection(importance - 1);  // Примерный индекс для отображения
+            if (note.getImageUri() != null) {
+                noteImageView.setImageURI(note.getImageUri());
+            }
+        }
+
+       
+        selectImageButton.setOnClickListener(view -> openImagePicker());
+
+
+        saveButton.setOnClickListener(view -> saveNote());
+
+
+        deleteButton.setOnClickListener(view -> deleteNote());
+    }
+
+    private void openImagePicker() {
+       
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 1); // Здесь 1 - это код запроса
+    }
+
+    private void saveNote() {
+        String newTitle = titleEditText.getText().toString();
+
+
+        String newDescription = descriptionEditText.getText().toString();
+        int newImportance = importanceSpinner.getSelectedItemPosition() + 1;
+        String newDateTime = System.currentTimeMillis() + "";
+
+        if (newTitle.isEmpty() || newDescription.isEmpty()) {
+            Toast.makeText(this, "Поля не можуть бути пусті", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int rowsAff = dbHelper.updateNote(noteId,  newTitle, newDescription, newImportance, newDateTime, imageUri1);
+        if (rowsAff > 0) {
+            Toast.makeText(this, "Нотатка змінена успішно", Toast.LENGTH_SHORT).show();
+            Intent resultIntent = new Intent();
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        } else {
+            Toast.makeText(this, "Помилка. Нотатка не змінена ", Toast.LENGTH_SHORT).show();
+        }
+       
+
+
+
+
+    }
+
+    private void deleteNote() {
+
+        showToast("ID =  "+noteId);
+        dbHelper.deleteNote( noteId);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("deleted_note_id", note.getId());
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == 1) { // Если это запрос на выбор изображения
+                imageUri = data.getData();
+                noteImageView.setImageURI(imageUri);
+            }
+        }
+    }
+}
+
+
+
+
+ДОДАТОК Е
+Файл Database.java
+package nure.sytnyk.polina.lab4;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+
+import java.util.ArrayList;
+
+public class Database extends SQLiteOpenHelper {
+
+    private static final String DB_NAME = "notes.db";
+    private static final int DB_VERSION = 1;
+    private static final String TABLE_NAME = "notes";
+    private Uri imageUri;
+    public Database(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, importance INTEGER, dateTime TEXT, imageUri TEXT)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
+    public long addNote(String title, String desc, int imp, String date, String imgUri) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", title);
+        values.put("description", desc);
+        values.put("importance", imp);
+        values.put("dateTime", date);
+        values.put("imageUri", imgUri);
+        return db.insert(TABLE_NAME, null, values);
+    }
+
+    public ArrayList<Note> getNotes() {
+        ArrayList<Note> notes = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        while (cursor.moveToNext()) {
+            notes.add(new Note(
+                    cursor.getLong(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getString(4),
+                    cursor.getString(5) != null ? Uri.parse(cursor.getString(5)) : null
+            ));
+        }
+        cursor.close();
+        return notes;
+    }
+
+    public int updateNote(long id, String title, String desc, int imp, String date, String imgUri) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", title);
+        values.put("description", desc);
+        values.put("importance", imp);
+        values.put("dateTime", date);
+        values.put("imageUri", imgUri);
+        return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void deleteNote(long id) {
+        getWritableDatabase().delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+    }
+
+
+}
+
+
+
