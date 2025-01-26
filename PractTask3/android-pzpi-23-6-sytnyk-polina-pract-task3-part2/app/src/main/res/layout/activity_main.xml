@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+
+    <TextView
+        android:id="@+id/handlerMessageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message will appear here"
+        android:layout_marginBottom="20dp"
+        android:textSize="18sp" />
+
+
+    <Button
+        android:id="@+id/startHandlerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Handler"
+        android:layout_marginBottom="20dp"/>
+
+
+    <Button
+        android:id="@+id/startBackgroundThreadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Background Thread"
+        android:layout_marginBottom="20dp"/>
+
+
+    <Button
+        android:id="@+id/sendMessageWithHandlerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Message With Handler"
+        android:layout_marginBottom="20dp"/>
+
+
+    <Button
+        android:id="@+id/startHandlerThreadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start HandlerThread" />
+</LinearLayout>
