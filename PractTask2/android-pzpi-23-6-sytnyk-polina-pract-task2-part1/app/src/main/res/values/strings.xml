@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">pract2</string>
+
+        <string name="update">Змінити текст</string>
+        <string name="mes">Показати повідомленя</string>
+        <string name="text1">Label1</string>
+        <string name="text2">Label2</string>
+        <string name="size">Змінити розмір</string>
+        <string name="color">Змінити колір</string>
+        <string name="image">Зображення</string>
+
+</resources>

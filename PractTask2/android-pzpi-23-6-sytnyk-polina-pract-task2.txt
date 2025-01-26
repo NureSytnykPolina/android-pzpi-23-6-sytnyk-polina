@@ -1,0 +1,188 @@
+?Міністерство освіти і науки України
+Харківський національний університет радіоелектроніки
+
+
+Кафедра ПІ
+
+
+Звіт
+з практичної роботи №2
+з дисципліни «Програмування під Android»
+   
+
+
+
+Виконала:                                                                       Перевірив:
+ст. гр. ПЗПІ-23-6                                                            ст. викладач кафедри ПІ
+Ситник П.А				                          Сокорчук І. П.
+
+
+
+
+
+Харків 2024
+Завдання
+1. Розмітка екрана
+1.1. Підготовка робочого середовища
+1.2. Практика з Linear Layout
+1.3. Практика з атрибутами елементів
+1.4. Обробка подій
+2. Файли розмітки Layout
+2.1. Створення різних Layout
+2.2. Практика роботи з атрибутами
+3. Життєвий цикл та методи Activity
+3.1. Ознайомлення з життєвим циклом Activity
+3.2. Дослідження методів життєвого циклу
+3.3. Вивчення поведінки Activity при зміні орієнтації екрана
+3.4. Практичне завдання з ручного збереження стану
+3.5. Дослідження переходу між Activity
+3.6. Обробка завершення Activity?
+Хід роботи
+1. Розмітка екрана
+1.1 Підготовка робочого середовища
+     Відкриваємо файл activity_main.xml та створюємо простий інтерфейс з використанням елементів, таких як TextView, Button та ImageView:
+1.2 Практика з Linear Layout
+     Створимо нову розмітку з використанням Linear Layout. В ній додамо декілька кнопок розташованих одне під одною.
+1.3. Практика з атрибутами елементів
+     Розробимо макет інтерфейсу, застосовуючи різноманітні компоненти та встановлюючи їхнє розташування за допомогою системи обмежень.
+     Дослідимо основні атрибути, такі як padding і margin, які дозволяють контролювати внутрішні та зовнішні відступи елементів, а також атрибути gravity і layout_gravity, що використовуються для їхнього вирівнювання всередині контейнера та відносно інших компонентів.
+     Окрім цього, налаштуємо текстові елементи, змінюючи параметри, зокрема розмір і колір шрифту, а також інші властивості, які впливають на стиль та зовнішній вигляд тексту в додатку.
+1.4 Обробка подій кнопки
+     До кнопок додамо атрибути android:onClick=UpdateText" та android:onClick="DisplayMes", а у коді реалізуємо відповідні методи, а саме:
+ public void UpdateText(View view) {
+    displayText.setText("Текст Змінено");
+}
+
+
+public void DisplayMes(View view) {
+    Toast.makeText(this, "Повідомлення показано", Toast.LENGTH_SHORT).show();
+}
+
+     Перший метод буде замінювати текст у TextView. А другий виводитиме повідомлення.
+
+
+1.5 Завдання для самостійної роботи
+        Створимо макет за допомогою GridLayout, в якому розташуємо текстові поля та кнопки. Додамо кілька кнопок, кожна з яких буде виконувати окрему функцію: перша дозволить змінювати розмір тексту, а друга змінить колір тексту на зелений.
+
+public void FontSize(View view) {
+        displayText.setTextSize(isLargeFont ? 14 : 26);
+        isLargeFont = !isLargeFont;
+    }
+
+
+    public void TextColor(View view) {
+        displayText.setTextColor(isRedText ? Color.BLACK : Color.GREEN);
+        isRedText = !isRedText;
+    }
+}
+
+2. Файли розмітки layout 
+2.1 Створення різних Layout
+     Створимо файл activity_main.xml, у ньому використано LinerLayout як базовий контейнер, а для розміщення кнопок реалізовано GridLayout з кількома рядками та стовпцями.
+2.2 Практика роботи за атрибутами
+	Для кожного елемента  було налаштовано ключові атрибути.
+Ініціалізація елементів інтерфейсу:
+setContentView(R.layout.activity_main);
+
+result = findViewById(R.id.result);
+
+Обробка натискання кнопок цифр:
+public void onDigitClick(View view) {
+    Button button = (Button) view;
+    currentInput += button.getText().toString();
+    result.setText(currentInput);
+     Логіка калькулятора:
+public void onEqualsClick(View view) {
+
+    if (currentInput.isEmpty()) {
+        Toast.makeText(this, "Будь ласка, введіть друге число", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    double secondOperand = 0;
+    try {
+        secondOperand = Double.parseDouble(currentInput);  // Спроба перетворити другий операнд
+    } catch (NumberFormatException e) {
+        Toast.makeText(this, "Невірний ввід", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    double resultValue = 0;
+
+    switch (operator) {
+        case "+":
+            resultValue = firstOperand + secondOperand;
+            break;
+        case "-":
+            resultValue = firstOperand - secondOperand;
+            break;
+        case "*":
+            resultValue = firstOperand * secondOperand;
+            break;
+        case "/":
+            if (secondOperand != 0) {
+                resultValue = firstOperand / secondOperand;
+            } else {
+                result.setText("Помилка");
+                return;
+            }
+            break;
+        default:
+            Toast.makeText(this, "Невірний оператор", Toast.LENGTH_SHORT).show();
+            return;
+    }
+
+    result.setText(String.valueOf(resultValue));
+    currentInput = String.valueOf(resultValue);
+    operator = "";
+}
+
+3. Життєвий цикл та методи activity
+3.1 Додайте до кожного методу життєвого циклу (onCreate, onStart, onResume тощо) функцію виведення повідомлень у лог (Log.d) для відстеження послідовності викликів. Приклад:
+Log.d(TAG, "onPause");
+3.2 Змініть орієнтацію пристрою (з портретної на ландшафтну) та спостерігайте за викликами методів життєвого циклу у логах.
+3.3 Дослідіть, як зміна орієнтації перезапускає Activity (викликаються методи onPause(), onStop(), onDestroy(), а потім onCreate(), onStart(), onResume()).
+3.4 Додайте в Activity поле для введення тексту.
+     Було реалізовано клікер, що зберігає кількість кліків.
+clickButton.setOnClickListener(v -> {
+    clickCount++;
+    clickCounterText.setText(String.valueOf(clickCount));
+
+Зберігається за допомогою:
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putInt("clickCount", clickCount); }
+
+
+     Друге Activity у застосунку. Додайте кнопку для переходу до другого Activity. Відстежте виклики методів життєвого циклу при переході між Activity. Додайте кнопку для завершення Activity.
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_second);
+
+    
+    finishButton = findViewById(R.id.finishButton);
+
+    
+    if (finishButton != null) {
+        
+        finishButton.setOnClickListener(v -> {
+            Toast.makeText(SecondActivity.this, "Finishing Second Activity...", Toast.LENGTH_SHORT).show();
+            finish(); 
+        });
+    } else {
+        Log.e(TAG, "finishButton is null");
+    }
+}
+?
+ Висновки
+    У процесі виконання практичної роботи було вивчено процес створення та налаштування різних видів розміток за допомогою XML-файлів. Було досліджено, як взаємодіють компоненти та їх атрибути. Ознайомилися з життєвим циклом компонентів Activity в Android-додатках і набуто навички керування станами Activity через використання основних методів життєвого циклу.
+Відеозвіт на YouTube:
+URL: https://youtu.be/XUF695PH5rA
+Використані джерела
+1.	Методичні вказівки до практичних занять: Розмітка екрана в Android. URL: https://dl.nure.ua/mod/page/view.php?id=599542 (дата звернення: 24.01.2025)
+2.	Методичні вказівки до практичних занять: Файли розмітки Layout. URL: https://dl.nure.ua/mod/page/view.php?id=599543 (дата звернення: 24.01.2025)
+3.	Методичні вказівки до практичного заняття: Життєвий цикл та методи Activity. URL: https://dl.nure.ua/mod/page/view.php?id=599544 (дата звернення: 24.01.2025)
+       
+       
