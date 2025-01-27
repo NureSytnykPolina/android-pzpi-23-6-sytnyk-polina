@@ -1,0 +1,323 @@
+?Міністерство освіти і науки України
+Харківський національний університет радіоелектроніки
+
+
+Кафедра ПІ
+
+
+Звіт
+з практичної роботи №4
+з дисципліни «Програмування під Android»
+   
+
+
+
+
+
+
+Виконала:                                                                                   Перевірив:
+ст. гр. ПЗПІ-23-6                                                                       ст. викладач кафедри ПІ
+Ситник Поліна                                                                          Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+
+Харків 2024
+
+ЗАВДАННЯ
+
+?	Ознайомитися з роботою SharedPreferences для збереження налаштувань 
+застосунку.
+?	Опанувати роботу з базою даних SQLite: створення, збереження та 
+отримання даних.
+
+
+ХІД РОБОТИ
+
+     Для збереження та завантаження користувацьких даних реалізовано механізм роботи з SharedPreferences.
+     Код збереження даних у SharedPreferences:
+
+SharedPreferences.Editor editor = sharedPreferences.edit();
+editor.putString("name", name);
+editor.apply();
+
+Робота із SQLite
+     Для роботи з базою даних використовується клас DataBase, який розширює SQLiteOpenHelper
+     Код ініціалізує клас SQLiteOpenHelper:
+public class DataBase extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "users.db";
+    private static final int DATABASE_VERSION = 1;
+    public static final String TABLE_NAME = "users";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+
+    public DataBase(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+
+
+
+Робота із файлами
+     Для збереження даних у файл використовується клас FileOutputStream, а для їх завантаження — FileInputStream:
+Код запису даних у файл
+private void writeToFile(String name) {
+    try {
+
+        FileOutputStream fos = openFileOutput("myfile.txt", MODE_PRIVATE);
+        fos.write(name.getBytes());
+        fos.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+        Toast.makeText(MainActivity.this, "Помилка при записі в файл", Toast.LENGTH_SHORT).show();
+    }
+}
+
+  Читання з файлу:
+readFileButton.setOnClickListener(v -> {
+    try {
+        // Відкриття файлу для читання
+        FileInputStream fis = openFileInput("myfile.txt");
+        int c;
+        StringBuilder temp = new StringBuilder();
+        while ((c = fis.read()) != -1) {
+            temp.append((char) c);
+        }
+        fis.close();
+        resultTextView.setText("Saved name: " + temp.toString());
+    } catch (IOException e) {
+        e.printStackTrace();
+        Toast.makeText(MainActivity.this, "Помилка при читанні з файлу", Toast.LENGTH_SHORT).show();
+    }
+});
+
+ВИСНОВКИ
+На цьому практичному заняття було вивчено основні методи збереження даних в Android: використано SharedPreferences для збереження налаштувань користувача у вигляді пар ключ-значення, застосовано SQLite для роботи з великими структурованими даними у реляційних базах, а також розглянуто роботу з файлами для запису та читання даних з локального сховища додатка.
+Відеозвіт на YouTube. URL: https://youtu.be/M5_VxAJ56kM
+ДОДАТОК А
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"
+        android:inputType="text" />
+
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add User" />
+
+
+    <Button
+        android:id="@+id/viewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Users" />
+
+    <Button
+        android:id="@+id/readFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read File" />
+
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Results will be displayed here"
+        android:paddingTop="16dp" />
+
+</LinearLayout>
+
+ДОДАТОК Б 
+MainActivity.java
+package nure.sytnyk.polina.pract4;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class MainActivity extends AppCompatActivity {
+    private EditText nameEditText;
+    private TextView resultTextView;
+    private SharedPreferences sharedPreferences;
+    private DataBase dbHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        nameEditText = findViewById(R.id.nameEditText);
+        resultTextView = findViewById(R.id.resultTextView);
+        Button addButton = findViewById(R.id.addButton);
+        Button viewButton = findViewById(R.id.viewButton);
+        Button readFileButton = findViewById(R.id.readFileButton);
+
+
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        dbHelper = new DataBase(this);
+
+
+        addButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+
+            // Збереження імені в SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("name", name);
+            editor.apply();
+
+
+            dbHelper.addUser(name);
+
+
+            writeToFile(name);
+
+
+            Toast.makeText(MainActivity.this, "Користувача додано успішно!", Toast.LENGTH_SHORT).show();
+
+            // Очищення поля введення після додавання
+            nameEditText.setText("");
+        });
+
+
+        viewButton.setOnClickListener(v -> {
+
+            Cursor cursor = dbHelper.getAllUsers();
+            StringBuilder result = new StringBuilder();
+
+            // Обробка курсора та відображення результатів
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    int nameColumnIndex = cursor.getColumnIndex(DataBase.COLUMN_NAME);
+                    if (nameColumnIndex != -1) {
+                        result.append("Name: ").append(cursor.getString(nameColumnIndex)).append("\n");
+                    }
+                }
+                cursor.close();
+            } else {
+                result.append("Користувачі не знайдені.");
+            }
+
+
+            resultTextView.setText(result.toString());
+        });
+
+
+        readFileButton.setOnClickListener(v -> {
+            try {
+                // Відкриття файлу для читання
+                FileInputStream fis = openFileInput("myfile.txt");
+                int c;
+                StringBuilder temp = new StringBuilder();
+                while ((c = fis.read()) != -1) {
+                    temp.append((char) c);
+                }
+                fis.close();
+                resultTextView.setText("Saved name: " + temp.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "Помилка при читанні з файлу", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void writeToFile(String name) {
+        try {
+
+            FileOutputStream fos = openFileOutput("myfile.txt", MODE_PRIVATE);
+            fos.write(name.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Помилка при записі в файл", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+
+ДОДАТОК В
+DataBase.java
+package nure.sytnyk.polina.pract4;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DataBase extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "users.db";
+    private static final int DATABASE_VERSION = 1;
+    public static final String TABLE_NAME = "users";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+
+    public DataBase(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NAME + " TEXT)";
+        db.execSQL(CREATE_TABLE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
+
+    public void addUser(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        db.insert(TABLE_NAME, null, values);
+        db.close();
+    }
+
+
+    public Cursor getAllUsers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.query(TABLE_NAME, null, null, null, null, null, COLUMN_ID + " DESC"); // Sorting by DESC to get most recent first
+    }
+}
+
